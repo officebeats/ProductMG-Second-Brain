@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-g" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ProductMG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Montserrat', 'sans-serif'],
+            },
+            colors: {
+              'brand-primary': '#00A39C', // BCG Teal
+              'brand-secondary': '#6DD5C3', // Lighter accent
+              
+              // Light Theme
+              'light-bg': '#E0E5EC',
+              'light-text': '#374151',
+              'light-shadow-1': '#FFFFFF',
+              'light-shadow-2': '#9DA8BE', // Higher contrast shadow
+
+              // Dark Theme
+              'dark-bg': '#2C3036',
+              'dark-text': '#E0E5EC',
+              'dark-shadow-1': '#434850', // Brighter highlight
+              'dark-shadow-2': '#1F2226', // Darker shadow
+            },
+            boxShadow: {
+              'neumorphic-light': '5px 5px 9px #9DA8BE, -5px -5px 9px #FFFFFF, 0 0 5px rgba(0, 255, 245, 0.5), 0 0 22px rgba(0, 163, 156, 0.4)',
+              'neumorphic-light-inset': 'inset 5px 5px 9px #9DA8BE, inset -5px -5px 9px #FFFFFF, inset 0 0 9px rgba(0, 163, 156, 0.5)',
+              'neumorphic-light-sm': '3px 3px 5px #9DA8BE, -3px -3px 5px #FFFFFF, 0 0 2px rgba(0, 255, 245, 0.3), 0 0 8px rgba(0, 163, 156, 0.2)',
+              'neumorphic-light-sm-inset': 'inset 3px 3px 5px #9DA8BE, inset -3px -3px 5px #FFFFFF, inset 0 0 4px rgba(0, 163, 156, 0.3)',
+
+              'neumorphic-dark': '5px 5px 9px #1F2226, -5px -5px 9px #434850, 0 0 5px rgba(109, 213, 195, 0.7), 0 0 22px rgba(109, 213, 195, 0.6)',
+              'neumorphic-dark-inset': 'inset 5px 5px 9px #1F2226, inset -5px -5px 9px #434850, inset 0 0 9px rgba(109, 213, 195, 0.6)',
+              'neumorphic-dark-sm': '3px 3px 5px #1F2226, -3px -3px 5px #434850, 0 0 2px rgba(109, 213, 195, 0.4), 0 0 8px rgba(109, 213, 195, 0.3)',
+              'neumorphic-dark-sm-inset': 'inset 3px 3px 5px #1F2226, inset -3px -3px 5px #434850, inset 0 0 4px rgba(109, 213, 195, 0.4)',
+            },
+            keyframes: {
+              'fade-in': {
+                '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              'pulse-bg': {
+                '0%, 100%': { 'background-color': 'rgba(0, 163, 156, 0.1)' },
+                '50%': { 'background-color': 'rgba(0, 163, 156, 0.2)' },
+              }
+            },
+            animation: {
+              'fade-in': 'fade-in 0.5s ease-out forwards',
+              'pulse-bg': 'pulse-bg 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Montserrat', sans-serif;
+      }
+    </style>
+     <script>
+      // Avoids flash of un-styled content (FOUC) for dark mode
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.27.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
