@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import type { Task, Comment, Stakeholder } from '../types';
 import { TaskStatus, TaskType, TaskPriority } from '../types';
@@ -22,6 +21,7 @@ type Action =
   | { type: 'SET_FILTERS', payload: Partial<AppState['filters']> }
   | { type: 'ADD_COMMENT', payload: { taskId: string; comment: Comment } }
   | { type: 'UPDATE_STAKEHOLDER', payload: { originalName: string; updatedStakeholder: Omit<Stakeholder, 'id'> } }
+  | { type: 'ADD_STAKEHOLDER'; payload: Stakeholder }
   | { type: 'INVITE_STAKEHOLDERS'; payload: string[] } // array of stakeholder names
   | { type: 'BULK_UPDATE_TASKS'; payload: { ids: string[]; updates: Partial<Task> } }
   | { type: 'BULK_DELETE_TASKS'; payload: string[] };
@@ -100,6 +100,21 @@ const appReducer = (state: AppState, action: Action): AppState => {
                     featureRequests: mapFeatureRequests(task.featureRequests),
                 };
             }),
+        };
+    case 'ADD_STAKEHOLDER':
+        const newStakeholderTask: Task = {
+            id: `task-sh-${action.payload.id}`,
+            title: `Stakeholder: ${action.payload.name}`,
+            description: `Stakeholder record for ${action.payload.name}`,
+            type: TaskType.Stakeholder,
+            status: TaskStatus.Triage,
+            priority: TaskPriority.Medium,
+            createdAt: new Date().toISOString(),
+            stakeholders: [action.payload],
+        };
+        return {
+            ...state,
+            tasks: [newStakeholderTask, ...state.tasks],
         };
     case 'INVITE_STAKEHOLDERS':
         return {

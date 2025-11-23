@@ -1,4 +1,5 @@
 
+
 import * as React from 'react';
 import type { Task } from '../types';
 import { TASK_TYPE_COLORS, TASK_PRIORITY_COLORS } from '../constants';
@@ -92,6 +93,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEditTask, isCompact = false
                         src={task.assignee.avatarUrl}
                         alt={task.assignee.name}
                         title={task.assignee.name}
+                        loading="lazy"
                     />
                 </div>
             )}

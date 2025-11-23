@@ -1,5 +1,4 @@
 
-
 import * as React from 'react';
 import type { User } from '../types';
 import { ViewType } from '../types';
@@ -70,7 +69,7 @@ const UserMenu: React.FC<{ user: User; onLogout: () => void }> = ({ user, onLogo
                 aria-haspopup="true"
                 aria-expanded={isOpen}
             >
-                <img className="h-10 w-10 rounded-full" src={user.avatarUrl} alt={user.name} />
+                <img className="h-10 w-10 rounded-full" src={user.avatarUrl} alt={user.name} loading="lazy" />
             </button>
             
             {isOpen && (
@@ -102,7 +101,10 @@ const Header: React.FC<HeaderProps> = ({ user, currentView, setView, onNewTask, 
           <div className="flex items-center">
              <div className="flex items-center space-x-3 text-2xl font-bold">
                 <Logo className="h-12 w-12" />
-                <span className="hidden sm:block text-brand-primary">MG</span>
+                <span className="hidden sm:block">
+                    <span className="text-light-text dark:text-white">Product</span>
+                    <span className="text-brand-primary ml-1">MG</span>
+                </span>
             </div>
           </div>
           <div className="flex items-center space-x-2 sm:space-x-4">

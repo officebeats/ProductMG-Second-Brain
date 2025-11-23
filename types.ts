@@ -56,6 +56,7 @@ export interface Stakeholder {
     role?: string;
     avatarData?: string; // Storing image data directly
     invited?: boolean;
+    linkedIn?: string; // LinkedIn Profile URL
 }
 
 export interface Attachment {

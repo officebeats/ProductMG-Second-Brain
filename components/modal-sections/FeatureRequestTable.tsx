@@ -1,4 +1,5 @@
 
+
 import * as React from 'react';
 import type { FeatureRequestEntry, Stakeholder, User, Comment } from '../../types';
 import { analyzeFeatureRequest } from '../../services/geminiService';
@@ -156,7 +157,7 @@ export const FeatureRequestTable: React.FC<FeatureRequestTableProps> = ({ featur
                             <div className="mt-4 space-y-3 animate-fade-in" style={{animationDuration: '300ms'}}>
                                 {(req.comments || []).map(comment => (
                                      <div key={comment.id} className="flex items-start space-x-3 text-sm">
-                                        <img src={comment.author.avatarUrl} alt={comment.author.name} className="h-6 w-6 rounded-full mt-1" />
+                                        <img src={comment.author.avatarUrl} alt={comment.author.name} className="h-6 w-6 rounded-full mt-1" loading="lazy" />
                                         <div className="flex-1 p-2 rounded-lg bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset">
                                         <p><span className="font-semibold">{comment.author.name}</span> <span className="text-xs opacity-60 ml-2">{new Date(comment.createdAt).toLocaleDateString()}</span></p>
                                         <p className="mt-1">{comment.content}</p>
@@ -164,7 +165,7 @@ export const FeatureRequestTable: React.FC<FeatureRequestTableProps> = ({ featur
                                     </div>
                                 ))}
                                 <div className="flex items-start space-x-3">
-                                     <img src={user.avatarUrl} alt={user.name} className="h-6 w-6 rounded-full mt-1" />
+                                     <img src={user.avatarUrl} alt={user.name} className="h-6 w-6 rounded-full mt-1" loading="lazy" />
                                      <div className="flex-grow">
                                         <textarea 
                                             value={newCommentText[req.id] || ''}

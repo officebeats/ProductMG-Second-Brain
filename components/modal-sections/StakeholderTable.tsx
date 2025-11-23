@@ -1,4 +1,5 @@
 
+
 import * as React from 'react';
 import type { Stakeholder } from '../../types';
 import { TrashIcon, StakeholderIcon } from '../icons/Icons';
@@ -48,7 +49,7 @@ export const StakeholderTable: React.FC<StakeholderTableProps> = ({ stakeholders
                     <div key={sh.id} className="flex items-center space-x-4 p-3 rounded-lg border border-light-shadow-2/30 dark:border-dark-shadow-2/80">
                         <button type="button" onClick={() => onEditPhoto(index)} className="relative group flex-shrink-0">
                             {sh.avatarData ? (
-                                <img src={sh.avatarData} alt={sh.name} className="h-12 w-12 rounded-full object-cover shadow-neumorphic-light-sm dark:shadow-neumorphic-dark-sm" />
+                                <img src={sh.avatarData} alt={sh.name} className="h-12 w-12 rounded-full object-cover shadow-neumorphic-light-sm dark:shadow-neumorphic-dark-sm" loading="lazy" />
                             ) : (
                                 <div className="h-12 w-12 rounded-full bg-light-bg dark:bg-dark-shadow-2 shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset flex items-center justify-center">
                                     <StakeholderIcon />

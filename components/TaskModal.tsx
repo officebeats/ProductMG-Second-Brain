@@ -1,10 +1,9 @@
-
 import * as React from 'react';
 import { useAppContext } from '../context/AppContext';
 import { summarizeComments, generateUpdatedDescription, generateTaskContent, suggestTaskDetails, generateTaskTitleFromDescription } from '../services/geminiService';
 import type { Task, Comment, User, Attachment, Stakeholder } from '../types';
 import { TaskStatus, TaskType, TaskPriority } from '../types';
-import { SparklesIcon, SpinnerIcon, PaperclipIcon, CloseIcon, TrashIcon, MaximizeIcon } from './icons/Icons';
+import { SparklesIcon, SpinnerIcon, PaperclipIcon, CloseIcon, TrashIcon } from './icons/Icons';
 import ImageCropperModal from './ImageCropperModal';
 import { UserStoryTable } from './modal-sections/UserStoryTable';
 import { BugReportTable } from './modal-sections/BugReportTable';
@@ -302,19 +301,19 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
                     </div>
                   </div>
                   
-                   {/* RICE Scoring Section - Compacted */}
+                   {/* DVF + Risk Scoring Section - Compacted */}
                   <div>
-                      <h3 className="text-sm font-bold mb-2 uppercase text-light-text/70 dark:text-dark-text/70">Prioritization</h3>
+                      <h3 className="text-sm font-bold mb-2 uppercase text-light-text/70 dark:text-dark-text/70">Prioritization (DVF)</h3>
                       <div className="p-3 rounded-lg bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset grid grid-cols-5 gap-2">
                           {[
-                              { label: 'Reach', key: 'reach' },
-                              { label: 'Impact', key: 'impact' },
-                              { label: 'Conf.', key: 'confidence' },
-                              { label: 'Effort', key: 'effort' },
-                              { label: 'Risk', key: 'risk' }
-                          ].map(({ label, key }) => (
-                               <div key={key} className="flex flex-col items-center">
-                                  <label className="text-[10px] font-bold uppercase mb-1 text-center">{label}</label>
+                              { label: 'Desirability', key: 'reach', title: 'How much do users want this?' },
+                              { label: 'Viability', key: 'impact', title: 'How valuable is this for the business?' },
+                              { label: 'Feasibility', key: 'effort', title: 'How easy is it to build? (High = Easy)' },
+                              { label: 'Int. Politics', key: 'confidence', title: 'Internal Politics: Organizational friction (High = Harder collaboration)' },
+                              { label: 'Risk', key: 'risk', title: 'Risk level' }
+                          ].map(({ label, key, title }) => (
+                               <div key={key} className="flex flex-col items-center" title={title}>
+                                  <label className="text-[10px] font-bold uppercase mb-1 text-center truncate w-full cursor-help">{label}</label>
                                   <RatingDots 
                                     value={(formData as any)[key] || 0} 
                                     onChange={(v) => handleFormDataChange(key as any, v)} 
@@ -322,8 +321,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
                                         key === 'risk' ? "bg-red-500 dark:bg-red-400" : 
                                         key === 'reach' ? "bg-indigo-500 dark:bg-indigo-400" :
                                         key === 'impact' ? "bg-blue-500 dark:bg-blue-400" :
-                                        key === 'confidence' ? "bg-green-500 dark:bg-green-400" :
-                                        "bg-yellow-500 dark:bg-yellow-400"
+                                        key === 'effort' ? "bg-yellow-500 dark:bg-yellow-400" :
+                                        "bg-orange-500 dark:bg-orange-400" // Politics color
                                     } 
                                     size="sm"
                                   />
@@ -436,7 +435,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
                       <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
                         {(formData.comments || []).map(comment => (
                           <div key={comment.id} className="flex items-start space-x-2">
-                            <img src={comment.author.avatarUrl} alt={comment.author.name} className="h-6 w-6 rounded-full" />
+                            <img src={comment.author.avatarUrl} alt={comment.author.name} className="h-6 w-6 rounded-full" loading="lazy" />
                             <div className="flex-1 p-2 rounded-lg bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset">
                               <p className="text-xs font-semibold">{comment.author.name} <span className="font-normal opacity-60 ml-1">{new Date(comment.createdAt).toLocaleString()}</span></p>
                               <p className="text-xs mt-0.5">{comment.content}</p>

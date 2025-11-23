@@ -1,4 +1,5 @@
 
+
 import * as React from 'react';
 import { TaskPriority } from '../../types';
 
@@ -58,12 +59,11 @@ export const Logo: React.FC<{ className?: string }> = ({ className }) => (
     viewBox="0 0 100 100"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    aria-label="ProductMG Logo"
+    aria-label="MG Logo"
   >
-    <rect width="100" height="100" rx="20" className="fill-current text-brand-primary" />
-    <g stroke="white" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" fill="none">
-      {/* Monogram PG */}
-      <path d="M30 75 V 25 H 50 C 65 25, 65 45, 50 45 H 45 C 60 45, 70 55, 70 65 S 60 75, 45 75 H 30" />
+    <g stroke="#00A39C" strokeWidth="8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M 25 95 L 25 35 A 30 30 0 0 1 55 5 A 30 30 0 0 1 85 35 A 30 30 0 0 1 55 65 L 25 65" />
+        <path d="M 45 95 L 45 35 A 10 10 0 0 1 55 25 A 10 10 0 0 1 65 35 A 10 10 0 0 1 55 45 L 45 45" />
     </g>
   </svg>
 );
@@ -165,8 +165,32 @@ export const ChartBarIcon: React.FC = () => (
     </svg>
 );
 
+export const GridIcon: React.FC = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+    </svg>
+);
+
 export const CalendarIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+);
+
+export const ChevronLeftIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+);
+
+export const ChevronRightIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+);
+
+export const LinkedInIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${className}`} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
     </svg>
 );

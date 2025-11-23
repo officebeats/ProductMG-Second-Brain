@@ -1,16 +1,15 @@
-
-
 import * as React from 'react';
 import type { Task, Stakeholder } from '../types';
 import type { StakeholderWithTasks } from './StakeholderView';
 import { TASK_TYPE_COLORS } from '../constants';
-import { CloseIcon, StakeholderIcon } from './icons/Icons';
+import { CloseIcon, StakeholderIcon, LinkedInIcon, MagicIcon, SpinnerIcon } from './icons/Icons';
 import ImageCropperModal from './ImageCropperModal';
+import { getLinkedInProfileInfo } from '../services/geminiService';
 
 interface StakeholderDetailModalProps {
   stakeholderWithTasks: StakeholderWithTasks;
   onClose: () => void;
-  onSave: (originalName: string, updatedDetails: { name: string; role?: string; avatarData?: string; }) => void;
+  onSave: (originalName: string, updatedDetails: { name: string; role?: string; avatarData?: string; linkedIn?: string }) => void;
   onSelectTask: (task: Task) => void;
 }
 
@@ -19,24 +18,45 @@ const StakeholderDetailModal: React.FC<StakeholderDetailModalProps> = ({ stakeho
   const [name, setName] = React.useState(stakeholder.name);
   const [role, setRole] = React.useState(stakeholder.role || '');
   const [avatarData, setAvatarData] = React.useState(stakeholder.avatarData || '');
+  const [linkedIn, setLinkedIn] = React.useState(stakeholder.linkedIn || '');
   const [isCropperOpen, setIsCropperOpen] = React.useState(false);
+  const [isLoadingLinkedIn, setIsLoadingLinkedIn] = React.useState(false);
 
 
   React.useEffect(() => {
     setName(stakeholder.name);
     setRole(stakeholder.role || '');
     setAvatarData(stakeholder.avatarData || '');
+    setLinkedIn(stakeholder.linkedIn || '');
   }, [stakeholder]);
 
   const handleSave = () => {
     if (name.trim()) {
-      onSave(stakeholder.name, { name: name.trim(), role: role.trim(), avatarData: avatarData });
+      onSave(stakeholder.name, { name: name.trim(), role: role.trim(), avatarData: avatarData, linkedIn: linkedIn.trim() });
     }
   };
 
   const handlePhotoSave = (dataUrl: string) => {
       setAvatarData(dataUrl);
       setIsCropperOpen(false);
+  };
+
+  const handleImportLinkedIn = async () => {
+      if (!linkedIn) return;
+      setIsLoadingLinkedIn(true);
+      const data = await getLinkedInProfileInfo(linkedIn);
+      if (data) {
+          setName(data.name);
+          setRole(data.role);
+          setAvatarData(data.avatarData);
+      }
+      setIsLoadingLinkedIn(false);
+  };
+
+  const openLinkedIn = () => {
+      if (linkedIn) {
+          window.open(linkedIn, '_blank');
+      }
   };
 
   const NeumorphicInput = "w-full p-3 rounded-lg bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-inset dark:shadow-neumorphic-dark-inset focus:outline-none focus:ring-2 focus:ring-brand-primary transition-shadow duration-200";
@@ -61,12 +81,12 @@ const StakeholderDetailModal: React.FC<StakeholderDetailModalProps> = ({ stakeho
         </div>
         
         <div className="flex-grow p-6 space-y-6 overflow-y-auto">
-          <div className="flex items-center space-x-4">
-             <button type="button" onClick={() => setIsCropperOpen(true)} className="relative group flex-shrink-0">
+          <div className="flex items-start space-x-4">
+             <button type="button" onClick={() => setIsCropperOpen(true)} className="relative group flex-shrink-0 mt-1">
                 {avatarData ? (
-                    <img src={avatarData} alt={name} className="h-20 w-20 rounded-full object-cover shadow-neumorphic-light-sm dark:shadow-neumorphic-dark-sm" />
+                    <img src={avatarData} alt={name} className="h-24 w-24 rounded-full object-cover shadow-neumorphic-light-sm dark:shadow-neumorphic-dark-sm" loading="lazy" />
                 ) : (
-                    <div className="h-20 w-20 rounded-full bg-light-bg dark:bg-dark-shadow-2 shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset flex items-center justify-center">
+                    <div className="h-24 w-24 rounded-full bg-light-bg dark:bg-dark-shadow-2 shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset flex items-center justify-center">
                         <StakeholderIcon />
                     </div>
                 )}
@@ -82,6 +102,33 @@ const StakeholderDetailModal: React.FC<StakeholderDetailModalProps> = ({ stakeho
                  <div>
                   <label className="block text-sm font-medium mb-1">Role (Optional)</label>
                   <input type="text" value={role} onChange={(e) => setRole(e.target.value)} className={NeumorphicInput} />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium mb-1 flex items-center"><LinkedInIcon className="w-3 h-3 mr-1"/> LinkedIn Profile</label>
+                    <div className="flex space-x-2">
+                        <input 
+                            type="text" 
+                            value={linkedIn} 
+                            onChange={(e) => setLinkedIn(e.target.value)} 
+                            placeholder="https://linkedin.com/in/..." 
+                            className={NeumorphicInput} 
+                        />
+                        <button 
+                            type="button"
+                            onClick={handleImportLinkedIn}
+                            disabled={isLoadingLinkedIn || !linkedIn}
+                            className="px-3 py-2 rounded-lg bg-brand-primary text-white shadow-md hover:opacity-90 disabled:opacity-50"
+                            title="Auto-fill details from LinkedIn"
+                        >
+                            {isLoadingLinkedIn ? <SpinnerIcon /> : <MagicIcon />}
+                        </button>
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                        <p className="text-[10px] opacity-60">Auto-fill extracts name & simulates a picture.</p>
+                        {linkedIn && (
+                            <button type="button" onClick={openLinkedIn} className="text-xs text-blue-600 hover:underline">Visit Profile</button>
+                        )}
+                    </div>
                 </div>
             </div>
           </div>

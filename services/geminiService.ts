@@ -227,3 +227,52 @@ export const analyzeFeatureRequest = async (rawRequest: string): Promise<Partial
         return null;
     }
 };
+
+export const getLinkedInProfileInfo = async (url: string): Promise<{ name: string; role: string; avatarData: string } | null> => {
+    if (!isGeminiEnabled() || !url) {
+        return Promise.resolve(null);
+    }
+
+    try {
+        const prompt = `I have a LinkedIn URL: "${url}".
+        
+        Based on the structure of this URL (and any typical naming conventions), infer the user's full name.
+        Also, suggest a likely generic professional role (e.g., "Product Manager", "Software Engineer") based on common profiles if you can infer it, otherwise default to "Stakeholder".
+        
+        Return a JSON object with "name" and "role".`;
+
+        const responseSchema = {
+            type: Type.OBJECT,
+            properties: {
+                name: { type: Type.STRING },
+                role: { type: Type.STRING },
+            },
+            required: ['name', 'role'],
+        };
+
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: responseSchema,
+            },
+        });
+
+        const data = JSON.parse(response.text.trim());
+        
+        // Use a deterministic avatar service to "pull" a picture based on the name
+        // This simulates fetching the profile image without hitting CORS issues with real LinkedIn URLs
+        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=00A39C&color=fff&size=128`;
+
+        return {
+            name: data.name || 'New Stakeholder',
+            role: data.role || 'Stakeholder',
+            avatarData: avatarUrl
+        };
+
+    } catch (error) {
+        console.error("Error fetching LinkedIn info:", error);
+        return null;
+    }
+};
