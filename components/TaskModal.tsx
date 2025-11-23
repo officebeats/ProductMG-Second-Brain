@@ -81,13 +81,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
   const allUniqueStakeholders = React.useMemo(() => {
     const stakeholdersMap = new Map<string, Stakeholder>();
     state.tasks.forEach(task => {
-        // From dedicated stakeholders field
         task.stakeholders?.forEach(sh => {
             if (sh.name && !stakeholdersMap.has(sh.name)) {
                 stakeholdersMap.set(sh.name, sh);
             }
         });
-        // From feature requestors
         task.featureRequests?.forEach(fr => {
             if (fr.requestorName && !stakeholdersMap.has(fr.requestorName)) {
                 stakeholdersMap.set(fr.requestorName, {
@@ -255,7 +253,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
     onClose();
   };
   
-  // Tight, compact styles
   const NeumorphicInput = "w-full p-2 text-sm rounded-lg bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-inset dark:shadow-neumorphic-dark-inset focus:outline-none focus:ring-2 focus:ring-brand-primary transition-shadow duration-200";
   const NeumorphicActionButton = "flex items-center justify-center px-2 py-1 rounded-lg font-semibold text-xs shadow-neumorphic-light-sm dark:shadow-neumorphic-dark-sm hover:shadow-neumorphic-light-sm-inset dark:hover:shadow-neumorphic-dark-sm-inset focus:outline-none transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap";
   const LabelClass = "block text-xs font-bold mb-1 uppercase text-light-text/70 dark:text-dark-text/70";
@@ -276,7 +273,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
             {/* Main Scrollable Content */}
             <div className="flex-grow p-4 overflow-y-auto custom-scrollbar" onPaste={handlePaste}>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {/* Left Column (Main Info) - Spans 2 cols */}
                 <div className="lg:col-span-2 space-y-3">
                   <div className="relative">
                     <label htmlFor="title" className={LabelClass}>Title</label>
@@ -309,7 +305,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
                           {[
                               { label: 'Desirability', key: 'reach', title: 'How much do users want this?' },
                               { label: 'Viability', key: 'impact', title: 'How valuable is this for the business?' },
-                              { label: 'Feasibility', key: 'effort', title: 'How easy is it to build? (High = Easy)' },
+                              { label: 'Feasibility', key: 'effort', title: 'How easy is it to build?' },
                               { label: 'Demand/Politics', key: 'confidence', title: 'Demand/Politics: Organizational friction (High = Harder collaboration)' },
                               { label: 'Speed To Revenue', key: 'risk', title: 'How fast can this generate revenue?' }
                           ].map(({ label, key, title }) => (
@@ -333,7 +329,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
                   </div>
                 </div>
                 
-                {/* Right Column (Meta Info) - Compact Grid */}
+                {/* Right Column (Meta Info) */}
                 <div className="space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                         <div>
