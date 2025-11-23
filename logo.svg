@@ -1,7 +1,8 @@
 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100" height="100" rx="20" fill="#00A39C"/>
-  <g stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <!-- Monogram PG -->
-    <path d="M30 75 V 25 H 50 C 65 25, 65 45, 50 45 H 45 C 60 45, 70 55, 70 65 S 60 75, 45 75 H 30" />
+  <g stroke="#00A39C" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Outer P Path -->
+    <path d="M 25 95 L 25 35 A 30 30 0 0 1 55 5 A 30 30 0 0 1 85 35 A 30 30 0 0 1 55 65 L 25 65" />
+    <!-- Inner P Path -->
+    <path d="M 45 95 L 45 35 A 10 10 0 0 1 55 25 A 10 10 0 0 1 65 35 A 10 10 0 0 1 55 45 L 45 45" />
   </g>
 </svg>

@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
+import * as React from 'react';
 import type { Theme } from '../types';
 
 interface ThemeContextType {
@@ -7,44 +7,46 @@ interface ThemeContextType {
     setTheme: (theme: Theme) => void;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [theme, setThemeState] = useState<Theme>('system');
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    // Initialize state from localStorage, defaulting to 'system'
+    const [theme, setThemeState] = React.useState<Theme>(() => {
+        return (localStorage.getItem('theme') as Theme) || 'system';
+    });
 
-    useEffect(() => {
-        const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
-        const savedTheme = localStorage.getItem('theme') as Theme | null;
-
-        if (savedTheme) {
-            setThemeState(savedTheme);
-        }
-
-        const handleThemeChange = (e: MediaQueryListEvent) => {
-            if (theme === 'system') {
-                if (e.matches) {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
+    // Effect to apply the theme class and listen for system changes
+    React.useEffect(() => {
+        const root = window.document.documentElement;
+        
+        const applyTheme = (t: Theme) => {
+            const isDark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDark) {
+                root.classList.add('dark');
+            } else {
+                root.classList.remove('dark');
             }
         };
 
-        isDarkMode.addEventListener('change', handleThemeChange);
+        applyTheme(theme); // Apply theme on mount and when `theme` state changes.
 
-        return () => isDarkMode.removeEventListener('change', handleThemeChange);
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        const handleChange = () => {
+            // Re-apply theme only if the user's preference is 'system'
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme === 'system' || !currentTheme) {
+                 applyTheme('system');
+            }
+        };
 
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
     }, [theme]);
 
     const setTheme = (newTheme: Theme) => {
         localStorage.setItem('theme', newTheme);
         setThemeState(newTheme);
-
-        if (newTheme === 'dark' || (newTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
     };
     
     return (
@@ -55,7 +57,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 };
 
 export const useTheme = () => {
-    const context = useContext(ThemeContext);
+    const context = React.useContext(ThemeContext);
     if (context === undefined) {
         throw new Error('useTheme must be used within a ThemeProvider');
     }

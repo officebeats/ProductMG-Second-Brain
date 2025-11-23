@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import * as React from 'react';
 import { useAppContext } from '../context/AppContext';
 import { Task, TaskStatus, TaskType, TaskPriority } from '../types';
 
@@ -9,7 +9,7 @@ interface QuickTaskFormProps {
 
 const QuickTaskForm: React.FC<QuickTaskFormProps> = ({ onClose }) => {
     const { dispatch } = useAppContext();
-    const [title, setTitle] = useState('');
+    const [title, setTitle] = React.useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -42,7 +42,7 @@ const QuickTaskForm: React.FC<QuickTaskFormProps> = ({ onClose }) => {
                 onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
-                        handleSubmit(e);
+                        handleSubmit(e as any);
                     } else if (e.key === 'Escape') {
                         onClose();
                     }

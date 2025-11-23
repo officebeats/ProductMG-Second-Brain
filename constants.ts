@@ -25,8 +25,13 @@ export const INITIAL_TASKS: Task[] = [
     priority: TaskPriority.Urgent,
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     dueDate: tomorrow.toISOString().split('T')[0],
-    assignee: { name: 'Pat Product', avatarUrl: 'https://i.pravatar.cc/150?u=pat.product@example.com' },
+    assignee: { name: 'Beats', avatarUrl: 'https://i.pravatar.cc/150?u=beats@example.com' },
     product: 'Platform Core',
+    reach: 4,
+    impact: 5,
+    confidence: 4,
+    effort: 3,
+    risk: 2,
   },
   {
     id: 'task-2',
@@ -38,6 +43,11 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
     assignee: { name: 'Casey Coder', avatarUrl: 'https://i.pravatar.cc/150?u=casey.coder@example.com' },
     product: 'Analytics Suite',
+    reach: 3,
+    impact: 4,
+    confidence: 5,
+    effort: 2,
+    risk: 1,
     featureRequests: [
         {
             id: 'fr-1',
@@ -46,13 +56,27 @@ export const INITIAL_TASKS: Task[] = [
             rawRequest: 'My team is spending way too much time creating reports manually. We need a way to just get a weekly summary of our key metrics emailed to us every Monday morning. It would save us hours and let us focus on selling.',
             painPoint: 'Manual, time-consuming report generation.',
             businessContext: 'The sales team is losing valuable time on administrative tasks (reporting) instead of core sales activities.',
-            value: 'Increased sales team productivity, faster access to key metrics, and potentially more time dedicated to revenue-generating activities.'
+            value: 'Increased sales team productivity, faster access to key metrics, and potentially more time dedicated to revenue-generating activities.',
+            upvotes: [
+                { name: 'Beats', avatarUrl: 'https://i.pravatar.cc/150?u=beats@example.com' },
+                { name: 'Casey Coder', avatarUrl: 'https://i.pravatar.cc/150?u=casey.coder@example.com' },
+            ],
+            comments: [
+                {
+                    id: 'fr-comment-1',
+                    author: { name: 'Casey Coder', avatarUrl: 'https://i.pravatar.cc/150?u=casey.coder@example.com' },
+                    content: 'This would be huge for us too. The engineering leads would love this.',
+                    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+                }
+            ]
         },
         {
             id: 'fr-2',
             requestorName: 'Dana',
             requestorRole: 'Customer Success',
             rawRequest: 'It\'s hard to tell which customers are at risk of churning. If we could see a health score or some kind of warning when a customer\'s usage drops, we could intervene proactively.',
+            upvotes: [],
+            comments: [],
         }
     ]
   },
@@ -66,6 +90,11 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
     dueDate: twoWeeks.toISOString().split('T')[0],
     product: 'Platform Core',
+    reach: 4,
+    impact: 5,
+    confidence: 5,
+    effort: 5,
+    risk: 3,
     userStories: [
         {
             id: 'us-1',
@@ -91,6 +120,11 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
     assignee: { name: 'Dev Team', avatarUrl: 'https://i.pravatar.cc/150?u=dev.team@example.com' },
     product: 'Website',
+    reach: 5,
+    impact: 1,
+    confidence: 5,
+    effort: 1,
+    risk: 1,
     bugReports: [
         {
             id: 'br-1',
@@ -114,7 +148,7 @@ export const INITIAL_TASKS: Task[] = [
         },
         {
             id: 'comment-2',
-            author: { name: 'Pat Product', avatarUrl: 'https://i.pravatar.cc/150?u=pat.product@example.com' },
+            author: { name: 'Beats', avatarUrl: 'https://i.pravatar.cc/150?u=beats@example.com' },
             content: 'Thanks for confirming, @Casey. Is this a quick fix? If so, let\'s try to get it into the next sprint.',
             createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
         }
@@ -138,10 +172,10 @@ export const INITIAL_TASKS: Task[] = [
     status: TaskStatus.Next,
     priority: TaskPriority.Medium,
     createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-    assignee: { name: 'Pat Product', avatarUrl: 'https://i.pravatar.cc/150?u=pat.product@example.com' },
+    assignee: { name: 'Beats', avatarUrl: 'https://i.pravatar.cc/150?u=beats@example.com' },
     stakeholders: [
-        { id: 'sh-1', name: 'Valerie Pierce', role: 'VP of Sales' },
-        { id: 'sh-2', name: 'Samuels Consulting', role: 'External Partner' },
+        { id: 'sh-1', name: 'Valerie Pierce', role: 'VP of Sales', invited: true },
+        { id: 'sh-2', name: 'Samuels Consulting', role: 'External Partner', invited: false },
     ]
   },
   {
@@ -153,6 +187,11 @@ export const INITIAL_TASKS: Task[] = [
     priority: TaskPriority.High,
     createdAt: new Date().toISOString(),
     product: 'Platform Core',
+    reach: 2,
+    impact: 3,
+    confidence: 3,
+    effort: 2,
+    risk: 4,
   },
 ];
 

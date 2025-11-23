@@ -32,6 +32,30 @@ Focus on the key objectives and outcomes.`;
   }
 };
 
+export const generateTaskTitleFromDescription = async (description: string): Promise<string> => {
+    if (!isGeminiEnabled() || !description) {
+        return "New Task";
+    }
+
+    try {
+        const prompt = `As a product manager, generate a concise, professional, and descriptive title (max 8 words) for a task based on the following description:
+
+        Description: "${description}"
+
+        Return ONLY the title text, nothing else.`;
+
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+        });
+
+        return response.text.replace(/^"|"$/g, '').trim(); // Remove quotes if present
+    } catch (error) {
+        console.error("Error generating title from description:", error);
+        return "New Idea";
+    }
+};
+
 
 export const suggestTaskDetails = async (title: string, description: string): Promise<{ status: TaskStatus; type: TaskType; priority: TaskPriority } | null> => {
     if (!isGeminiEnabled() || !title || !description) {

@@ -45,12 +45,17 @@ export interface FeatureRequestEntry {
     painPoint?: string;
     businessContext?: string;
     value?: string;
+    // New collaboration fields
+    upvotes?: { name: string; avatarUrl: string }[];
+    comments?: Comment[];
 }
 
 export interface Stakeholder {
     id:string;
     name: string;
     role?: string;
+    avatarData?: string; // Storing image data directly
+    invited?: boolean;
 }
 
 export interface Attachment {
@@ -84,6 +89,12 @@ export interface Task {
   stakeholders?: Stakeholder[];
   attachments?: Attachment[];
   comments?: Comment[];
+  // RICE + Risk scoring
+  reach?: number;
+  impact?: number; // 1-5 scale
+  confidence?: number; // 1-5 scale
+  effort?: number; // 1-5 scale
+  risk?: number; // 1-5 scale
 }
 
 export interface User {
@@ -94,7 +105,9 @@ export interface User {
 
 export enum ViewType {
     Kanban = 'Kanban',
-    List = 'List'
+    List = 'List',
+    Stakeholders = 'Stakeholders',
+    Prioritization = 'Prioritization',
 }
 
 export type Theme = 'light' | 'dark' | 'system';

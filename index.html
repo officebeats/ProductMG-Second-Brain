@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
   <head>
-    <meta charset="UTF-g" />
+    <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ProductMG</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Theme Color for Browser UI -->
+    <meta name="theme-color" content="#E0E5EC" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#2C3036" media="(prefers-color-scheme: dark)">
+
+    <!-- iOS Specific PWA Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ProductMG">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -37,7 +51,7 @@
               'neumorphic-light': '5px 5px 9px #9DA8BE, -5px -5px 9px #FFFFFF, 0 0 5px rgba(0, 255, 245, 0.5), 0 0 22px rgba(0, 163, 156, 0.4)',
               'neumorphic-light-inset': 'inset 5px 5px 9px #9DA8BE, inset -5px -5px 9px #FFFFFF, inset 0 0 9px rgba(0, 163, 156, 0.5)',
               'neumorphic-light-sm': '3px 3px 5px #9DA8BE, -3px -3px 5px #FFFFFF, 0 0 2px rgba(0, 255, 245, 0.3), 0 0 8px rgba(0, 163, 156, 0.2)',
-              'neumorphic-light-sm-inset': 'inset 3px 3px 5px #9DA8BE, inset -3px -3px 5px #FFFFFF, inset 0 0 4px rgba(0, 163, 156, 0.3)',
+              'neumorphic-light-sm-inset': 'inset 3px 3px 5px #9DA8BE, inset -3px -3px 5px #FFFFFF, inset 0 0 4px rgba(163, 156, 0.3)',
 
               'neumorphic-dark': '5px 5px 9px #1F2226, -5px -5px 9px #434850, 0 0 5px rgba(109, 213, 195, 0.7), 0 0 22px rgba(109, 213, 195, 0.6)',
               'neumorphic-dark-inset': 'inset 5px 5px 9px #1F2226, inset -5px -5px 9px #434850, inset 0 0 9px rgba(109, 213, 195, 0.6)',
@@ -79,9 +93,9 @@
 {
   "imports": {
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.27.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+    "react/": "https://aistudiocdn.com/react@^18.2.0/",
+    "react": "https://aistudiocdn.com/react@^18.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^18.2.0/"
   }
 }
 </script>
@@ -89,5 +103,18 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            })
+            .catch(error => {
+              console.log('ServiceWorker registration failed: ', error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>

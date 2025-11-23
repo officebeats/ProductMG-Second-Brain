@@ -1,5 +1,5 @@
 
-import React from 'react';
+import * as React from 'react';
 import { useAppContext } from '../context/AppContext';
 import { TaskType, TaskPriority, TaskStatus } from '../types';
 import { SearchIcon } from './icons/Icons';

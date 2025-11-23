@@ -1,5 +1,5 @@
 
-import React from 'react';
+import * as React from 'react';
 import type { Attachment } from '../types';
 import { CloseIcon, PaperclipIcon } from './icons/Icons';
 
