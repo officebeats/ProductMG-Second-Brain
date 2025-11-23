@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import type { Task, TaskType, TaskPriority, TaskStatus } from '../types';
 
@@ -6,6 +7,7 @@ interface Filters {
     type: TaskType | 'All';
     priority: TaskPriority | 'All';
     status: TaskStatus | 'All';
+    stakeholder: string | 'All';
 }
 
 interface Options {
@@ -21,7 +23,7 @@ interface Options {
  */
 export const useTaskFilters = (tasks: Task[], filters: Filters, options: Options = {}): Task[] => {
     return React.useMemo(() => {
-        const { searchQuery, type, priority, status } = filters;
+        const { searchQuery, type, priority, status, stakeholder } = filters;
         const query = searchQuery.toLowerCase();
         const { ignoreStatus = false } = options;
 
@@ -34,8 +36,13 @@ export const useTaskFilters = (tasks: Task[], filters: Filters, options: Options
             const matchesType = type !== 'All' ? task.type === type : true;
             const matchesPriority = priority !== 'All' ? task.priority === priority : true;
             const matchesStatus = ignoreStatus || status === 'All' ? true : task.status === status;
+            
+            const matchesStakeholder = stakeholder === 'All' ? true : (
+                (task.stakeholders?.some(s => s.name === stakeholder)) ||
+                (task.featureRequests?.some(fr => fr.requestorName === stakeholder))
+            );
 
-            return matchesSearch && matchesType && matchesPriority && matchesStatus;
+            return matchesSearch && matchesType && matchesPriority && matchesStatus && matchesStakeholder;
         });
     }, [tasks, filters, options]);
 };

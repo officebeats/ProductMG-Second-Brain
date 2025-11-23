@@ -6,7 +6,7 @@ import { SearchIcon } from './icons/Icons';
 
 const FilterBar: React.FC = () => {
     const { state, dispatch } = useAppContext();
-    const { filters } = state;
+    const { filters, tasks } = state;
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         dispatch({
@@ -15,10 +15,19 @@ const FilterBar: React.FC = () => {
         });
     };
 
-    const NeumorphicInput = "w-full p-3 rounded-lg bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-inset dark:shadow-neumorphic-dark-inset focus:outline-none focus:ring-2 focus:ring-brand-primary transition-shadow duration-200";
+    const uniqueStakeholders = React.useMemo(() => {
+        const names = new Set<string>();
+        tasks.forEach(task => {
+            task.stakeholders?.forEach(s => names.add(s.name));
+            task.featureRequests?.forEach(fr => names.add(fr.requestorName));
+        });
+        return Array.from(names).sort();
+    }, [tasks]);
+
+    const NeumorphicInput = "w-full p-3 rounded-lg bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-inset dark:shadow-neumorphic-dark-inset focus:outline-none focus:ring-2 focus:ring-brand-primary transition-shadow duration-200 text-sm";
 
     return (
-        <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center animate-fade-in">
+        <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-center animate-fade-in">
             {/* Search */}
             <div className="relative sm:col-span-2 lg:col-span-1">
                 <input
@@ -74,6 +83,20 @@ const FilterBar: React.FC = () => {
                 >
                     <option value="All">All Statuses</option>
                     {Object.values(TaskStatus).map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+            </div>
+
+            {/* Stakeholder Filter */}
+            <div>
+                 <select
+                    name="stakeholder"
+                    value={filters.stakeholder}
+                    onChange={handleFilterChange}
+                    className={NeumorphicInput}
+                    aria-label="Filter by stakeholder"
+                >
+                    <option value="All">All Stakeholders</option>
+                    {uniqueStakeholders.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
             </div>
 

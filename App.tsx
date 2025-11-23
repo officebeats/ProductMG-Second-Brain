@@ -151,7 +151,8 @@ const MainContent: React.FC<{ user: User; onLogout: () => void }> = ({ user, onL
         <div className="bg-light-bg dark:bg-dark-bg min-h-screen font-sans text-light-text dark:text-dark-text transition-colors duration-300">
             <Header user={user} currentView={view} setView={setView} onNewTask={openNewTaskModal} onLogout={onLogout} />
             <main className="p-2 sm:p-4 md:p-6 lg:p-8 pb-24"> {/* Added padding bottom for toolbar */}
-                <FilterBar />
+                {/* Hide FilterBar in Stakeholder view as per requirement */}
+                {view !== ViewType.Stakeholders && <FilterBar />}
                 {renderView()}
             </main>
             

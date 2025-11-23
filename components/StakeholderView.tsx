@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useAppContext } from '../context/AppContext';
 import { Task, Stakeholder } from '../types';
@@ -22,9 +23,11 @@ const StakeholderView: React.FC<StakeholderViewProps> = ({ onEditTask }) => {
     const [isInviteModalOpen, setIsInviteModalOpen] = React.useState(false);
     const [searchQuery, setSearchQuery] = React.useState('');
     
-    // View Mode State: 'list' | 'card', default to 'list' and persist
+    // View Mode State: 'list' | 'card'
+    // Default to 'list', but check localStorage for user preference (making it their 'default')
     const [viewMode, setViewMode] = React.useState<'list' | 'card'>(() => {
-        return (localStorage.getItem('stakeholderViewMode') as 'list' | 'card') || 'list';
+        const savedMode = localStorage.getItem('stakeholderViewMode');
+        return (savedMode === 'card' || savedMode === 'list') ? savedMode : 'list';
     });
 
     const handleViewModeChange = (mode: 'list' | 'card') => {
@@ -87,6 +90,14 @@ const StakeholderView: React.FC<StakeholderViewProps> = ({ onEditTask }) => {
     const handleSendInvites = (names: string[]) => {
         dispatch({ type: 'INVITE_STAKEHOLDERS', payload: names });
         setIsInviteModalOpen(false);
+    };
+    
+    const handleTransferStakeholder = (fromName: string, toName: string) => {
+        dispatch({
+            type: 'TRANSFER_STAKEHOLDER',
+            payload: { fromName, toName }
+        });
+        setEditingStakeholder(null);
     };
     
     const handleSelectTask = (task: Task) => {
@@ -305,8 +316,10 @@ const StakeholderView: React.FC<StakeholderViewProps> = ({ onEditTask }) => {
              {editingStakeholder && (
                 <StakeholderDetailModal
                     stakeholderWithTasks={editingStakeholder}
+                    allUniqueStakeholders={allUniqueStakeholders}
                     onClose={() => setEditingStakeholder(null)}
                     onSave={handleSaveStakeholder}
+                    onTransfer={handleTransferStakeholder}
                     onSelectTask={handleSelectTask}
                 />
             )}
