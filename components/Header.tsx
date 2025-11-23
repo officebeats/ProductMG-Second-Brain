@@ -108,24 +108,47 @@ const Header: React.FC<HeaderProps> = ({ user, currentView, setView, onNewTask, 
             </div>
           </div>
           <div className="flex items-center space-x-2 sm:space-x-4">
-            {/* View Switcher */}
-            <div className="p-1 rounded-xl bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset flex items-center space-x-1">
-                <NeumorphicButton onClick={() => setView(ViewType.Kanban)} isActive={currentView === ViewType.Kanban} aria-label="Kanban View" className="flex items-center px-3">
-                    <KanbanIcon />
-                    <span className="ml-2 hidden md:inline">Kanban</span>
-                </NeumorphicButton>
-                <NeumorphicButton onClick={() => setView(ViewType.List)} isActive={currentView === ViewType.List} aria-label="List View" className="flex items-center px-3">
-                    <ListIcon />
-                    <span className="ml-2 hidden md:inline">List</span>
-                </NeumorphicButton>
-                 <NeumorphicButton onClick={() => setView(ViewType.Prioritization)} isActive={currentView === ViewType.Prioritization} aria-label="Prioritization View" className="flex items-center px-3">
-                    <ChartBarIcon />
-                    <span className="ml-2 hidden md:inline">Prioritization</span>
-                </NeumorphicButton>
-                <NeumorphicButton onClick={() => setView(ViewType.Stakeholders)} isActive={currentView === ViewType.Stakeholders} aria-label="Stakeholders View" className="flex items-center px-3">
-                    <StakeholderIcon />
-                    <span className="ml-2 hidden md:inline">Stakeholders</span>
-                </NeumorphicButton>
+            {/* View Switcher Group */}
+            <div className="flex items-center gap-3">
+                {/* Board/List Toggle */}
+                <div className="flex p-1 bg-light-bg dark:bg-dark-bg rounded-xl shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset">
+                    <button
+                        onClick={() => setView(ViewType.Kanban)}
+                        className={`flex items-center px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                            currentView === ViewType.Kanban
+                                ? 'bg-brand-primary text-white shadow-md'
+                                : 'text-light-text dark:text-dark-text hover:bg-brand-secondary/10'
+                        }`}
+                        aria-label="Board View"
+                    >
+                        <KanbanIcon />
+                        <span className="ml-2 hidden md:inline">Board</span>
+                    </button>
+                    <button
+                        onClick={() => setView(ViewType.List)}
+                        className={`flex items-center px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                            currentView === ViewType.List
+                                ? 'bg-brand-primary text-white shadow-md'
+                                : 'text-light-text dark:text-dark-text hover:bg-brand-secondary/10'
+                        }`}
+                        aria-label="List View"
+                    >
+                        <ListIcon />
+                        <span className="ml-2 hidden md:inline">List</span>
+                    </button>
+                </div>
+
+                {/* Other Views */}
+                <div className="flex items-center space-x-2">
+                    <NeumorphicButton onClick={() => setView(ViewType.Prioritization)} isActive={currentView === ViewType.Prioritization} aria-label="Prioritization View" className="flex items-center px-3">
+                        <ChartBarIcon />
+                        <span className="ml-2 hidden lg:inline">Prioritization</span>
+                    </NeumorphicButton>
+                    <NeumorphicButton onClick={() => setView(ViewType.Stakeholders)} isActive={currentView === ViewType.Stakeholders} aria-label="Stakeholders View" className="flex items-center px-3">
+                        <StakeholderIcon />
+                        <span className="ml-2 hidden lg:inline">Stakeholders</span>
+                    </NeumorphicButton>
+                </div>
             </div>
 
             <button

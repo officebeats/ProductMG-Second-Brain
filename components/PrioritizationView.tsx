@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useAppContext } from '../context/AppContext';
 import type { Task } from '../types';
@@ -18,19 +19,18 @@ const calculatePrioritizationScore = (task: Task): number => {
     // reach -> Desirability (High is good)
     // impact -> Viability (High is good)
     // effort -> Feasibility (High is good)
-    // confidence -> Internal Politics (High is BAD/High friction)
+    // confidence -> Demand/Politics (High is BAD/High friction)
     
     const desirability = task.reach || 0;
     const viability = task.impact || 0;
     const feasibility = task.effort || 0;
-    const internalPolitics = task.confidence || 1; // Default to 1 to avoid divide by zero
+    const demandPolitics = task.confidence || 1; // Default to 1 to avoid divide by zero
 
-    // Formula: (Desirability * Viability * Feasibility) / Internal Politics
-    // If Politics is 0 (unset), treat as 1.
-    const divisor = internalPolitics === 0 ? 1 : internalPolitics;
+    // Formula: (Desirability * Viability * Feasibility) / Demand/Politics
+    if (demandPolitics === 0) return 0;
 
     // Max raw score potential: (5 * 5 * 5) / 1 = 125
-    return Math.round((desirability * viability * feasibility) / divisor);
+    return Math.round((desirability * viability * feasibility) / demandPolitics);
 }
 
 const getTShirtSize = (score: number): string => {
@@ -80,12 +80,12 @@ const PrioritizationView: React.FC<PrioritizationViewProps> = ({ onEditTask, onN
                     <thead className="text-xs capitalize whitespace-nowrap bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-sm sticky top-0 z-[5]">
                         <tr className="border-b border-light-shadow-2/50 dark:border-dark-shadow-1 text-light-text dark:text-dark-text">
                             <th scope="col" className="px-3 py-3 font-semibold cursor-pointer min-w-[200px]" onClick={() => handleSort('title')}>Summary {getSortArrow('title')}</th>
-                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('risk')} title="Risk level">Risk {getSortArrow('risk')}</th>
-                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('reach')} title="Desirability: How much do users want this?">Desirability {getSortArrow('reach')}</th>
-                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('impact')} title="Viability: How valuable is this for the business?">Viability {getSortArrow('impact')}</th>
-                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('effort')} title="Feasibility: How easy is it to build? (High = Easy)">Feasibility {getSortArrow('effort')}</th>
-                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('confidence')} title="Internal Politics: Organizational Friction (High = Harder)">Int. Politics {getSortArrow('confidence')}</th>
-                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('prioritizationScore')} title="DVF Score">Score {getSortArrow('prioritizationScore')}</th>
+                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('risk')} title="Speed To Revenue: How fast can this generate revenue?">Speed To Revenue {getSortArrow('risk')}</th>
+                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('reach')} title="Desirability: User demand">Desirability {getSortArrow('reach')}</th>
+                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('impact')} title="Viability: Business value">Viability {getSortArrow('impact')}</th>
+                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('effort')} title="Feasibility: Ease of build (High = Easy)">Feasibility {getSortArrow('effort')}</th>
+                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('confidence')} title="Demand/Politics: High friction or political blockers (High = Harder)">Demand/Politics {getSortArrow('confidence')}</th>
+                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('prioritizationScore')} title="Prioritization Score">Score {getSortArrow('prioritizationScore')}</th>
                         </tr>
                     </thead>
                     <tbody>

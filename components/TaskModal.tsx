@@ -1,9 +1,10 @@
+
 import * as React from 'react';
 import { useAppContext } from '../context/AppContext';
 import { summarizeComments, generateUpdatedDescription, generateTaskContent, suggestTaskDetails, generateTaskTitleFromDescription } from '../services/geminiService';
 import type { Task, Comment, User, Attachment, Stakeholder } from '../types';
 import { TaskStatus, TaskType, TaskPriority } from '../types';
-import { SparklesIcon, SpinnerIcon, PaperclipIcon, CloseIcon, TrashIcon } from './icons/Icons';
+import { SparklesIcon, SpinnerIcon, PaperclipIcon, CloseIcon, TrashIcon, MaximizeIcon } from './icons/Icons';
 import ImageCropperModal from './ImageCropperModal';
 import { UserStoryTable } from './modal-sections/UserStoryTable';
 import { BugReportTable } from './modal-sections/BugReportTable';
@@ -309,8 +310,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
                               { label: 'Desirability', key: 'reach', title: 'How much do users want this?' },
                               { label: 'Viability', key: 'impact', title: 'How valuable is this for the business?' },
                               { label: 'Feasibility', key: 'effort', title: 'How easy is it to build? (High = Easy)' },
-                              { label: 'Int. Politics', key: 'confidence', title: 'Internal Politics: Organizational friction (High = Harder collaboration)' },
-                              { label: 'Risk', key: 'risk', title: 'Risk level' }
+                              { label: 'Demand/Politics', key: 'confidence', title: 'Demand/Politics: Organizational friction (High = Harder collaboration)' },
+                              { label: 'Speed To Revenue', key: 'risk', title: 'How fast can this generate revenue?' }
                           ].map(({ label, key, title }) => (
                                <div key={key} className="flex flex-col items-center" title={title}>
                                   <label className="text-[10px] font-bold uppercase mb-1 text-center truncate w-full cursor-help">{label}</label>
