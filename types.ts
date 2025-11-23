@@ -114,3 +114,12 @@ export enum ViewType {
 }
 
 export type Theme = 'light' | 'dark' | 'system';
+
+export interface ScoringWeights {
+    reach: number;      // Desirability
+    impact: number;     // Viability
+    effort: number;     // Feasibility (Inverted)
+    confidence: number; // Internal Demand (Inverted)
+    risk: number;       // Speed to Revenue
+    growth: number;     // Speed to Growth
+}

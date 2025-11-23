@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import type { Task, Comment, Stakeholder } from '../types';
+import type { Task, Comment, Stakeholder, ScoringWeights } from '../types';
 import { TaskStatus, TaskType, TaskPriority } from '../types';
 import { INITIAL_TASKS } from '../constants';
 
@@ -13,6 +13,7 @@ interface AppState {
     status: TaskStatus | 'All';
     stakeholder: string | 'All';
   };
+  weights: ScoringWeights;
 }
 
 type Action =
@@ -27,7 +28,8 @@ type Action =
   | { type: 'TRANSFER_STAKEHOLDER'; payload: { fromName: string; toName: string } }
   | { type: 'INVITE_STAKEHOLDERS'; payload: string[] } // array of stakeholder names
   | { type: 'BULK_UPDATE_TASKS'; payload: { ids: string[]; updates: Partial<Task> } }
-  | { type: 'BULK_DELETE_TASKS'; payload: string[] };
+  | { type: 'BULK_DELETE_TASKS'; payload: string[] }
+  | { type: 'UPDATE_WEIGHTS'; payload: Partial<ScoringWeights> };
 
 
 const initialState: AppState = {
@@ -39,6 +41,15 @@ const initialState: AppState = {
     status: 'All',
     stakeholder: 'All',
   },
+  weights: {
+      // Default Business Best Practices
+      impact: 3,      // Viability is usually king
+      risk: 2,        // Speed to revenue is critical
+      reach: 2,       // User Desirability
+      growth: 1,      // Growth loop
+      effort: 1,      // Feasibility
+      confidence: 1,  // Internal Demand
+  }
 };
 
 const appReducer = (state: AppState, action: Action): AppState => {
@@ -136,13 +147,6 @@ const appReducer = (state: AppState, action: Action): AppState => {
                     // Add 'to' stakeholder if not already present
                     const alreadyHasTo = filtered.some(s => s.name === toName);
                     if (!alreadyHasTo) {
-                        // We need to construct a Stakeholder object for 'toName'. 
-                        // Ideally we look it up, but for the reducer we might have to create a placeholder 
-                        // or rely on the fact that 'toName' exists elsewhere.
-                        // For simplicity, we preserve the ID/Role of 'from' but change name, 
-                        // OR strictly we should find the 'to' stakeholder details.
-                        // Since this is a simple transfer, we will just add the name and empty role if we can't find it,
-                        // but in a real app we'd lookup. Here we'll just instantiate.
                         filtered.push({ id: `sh-trans-${Date.now()}`, name: toName, role: '' }); 
                     }
                     updatedStakeholders = filtered;
@@ -193,6 +197,11 @@ const appReducer = (state: AppState, action: Action): AppState => {
         return {
             ...state,
             tasks: state.tasks.filter(task => !action.payload.includes(task.id)),
+        };
+    case 'UPDATE_WEIGHTS':
+        return {
+            ...state,
+            weights: { ...state.weights, ...action.payload },
         };
     default:
       return state;
