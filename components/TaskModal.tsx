@@ -304,12 +304,12 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
                       <h3 className="text-sm font-bold mb-2 uppercase text-light-text/70 dark:text-dark-text/70">Prioritization (DVF)</h3>
                       <div className="p-3 rounded-lg bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset grid grid-cols-3 lg:grid-cols-6 gap-2">
                           {[
-                              { label: 'Desirability', key: 'reach', title: 'How much do users want this?' },
-                              { label: 'Viability', key: 'impact', title: 'How valuable is this for the business?' },
-                              { label: 'Feasibility', key: 'effort', title: 'How easy is it to build?' },
-                              { label: 'Internal Demand', key: 'confidence', title: 'Internal Demand: Organizational friction (High = Harder collaboration)' },
-                              { label: 'Speed To Revenue', key: 'risk', title: 'How fast can this generate revenue?' },
-                              { label: 'Speed To Growth', key: 'growth', title: 'How fast can this drive user growth?' }
+                              { label: 'Desirability', key: 'reach', title: 'User Appeal: How many customers need or want this feature? (1 = Niche, 5 = Everyone)' },
+                              { label: 'Viability', key: 'impact', title: 'Business Value: How much does this align with strategic goals? (1 = Low, 5 = Game Changer)' },
+                              { label: 'Effort', key: 'effort', title: 'Implementation Cost: How difficult is this to build? (1 = Trivial, 5 = Major Project)' },
+                              { label: 'Internal Demand', key: 'confidence', title: 'Internal Pressure: How much political pressure or friction exists? (1 = None, 5 = Critical/Mandatory)' },
+                              { label: 'Speed To Revenue', key: 'risk', title: 'Time to Revenue: How fast will this monetize? (1 = Slow/Long-term, 5 = Immediate)' },
+                              { label: 'Speed To Growth', key: 'growth', title: 'Viral Growth: How much will this drive new user acquisition? (1 = Low, 5 = Viral)' }
                           ].map(({ label, key, title }) => (
                                <div key={key} className="flex flex-col items-center" title={title}>
                                   <label className="text-[10px] font-bold uppercase mb-1 text-center truncate w-full cursor-help">{label}</label>
