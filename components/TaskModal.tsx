@@ -39,6 +39,7 @@ const getInitialFormData = (): Omit<Task, 'id' | 'createdAt'> => ({
     confidence: 1,
     effort: 1,
     risk: 1,
+    growth: 1,
 });
 
 const AutoGrowTextarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = (props) => {
@@ -301,13 +302,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
                    {/* DVF + Risk Scoring Section - Compacted */}
                   <div>
                       <h3 className="text-sm font-bold mb-2 uppercase text-light-text/70 dark:text-dark-text/70">Prioritization (DVF)</h3>
-                      <div className="p-3 rounded-lg bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset grid grid-cols-5 gap-2">
+                      <div className="p-3 rounded-lg bg-light-bg dark:bg-dark-bg shadow-neumorphic-light-sm-inset dark:shadow-neumorphic-dark-sm-inset grid grid-cols-3 lg:grid-cols-6 gap-2">
                           {[
                               { label: 'Desirability', key: 'reach', title: 'How much do users want this?' },
                               { label: 'Viability', key: 'impact', title: 'How valuable is this for the business?' },
                               { label: 'Feasibility', key: 'effort', title: 'How easy is it to build?' },
-                              { label: 'Demand/Politics', key: 'confidence', title: 'Demand/Politics: Organizational friction (High = Harder collaboration)' },
-                              { label: 'Speed To Revenue', key: 'risk', title: 'How fast can this generate revenue?' }
+                              { label: 'Internal Demand', key: 'confidence', title: 'Internal Demand: Organizational friction (High = Harder collaboration)' },
+                              { label: 'Speed To Revenue', key: 'risk', title: 'How fast can this generate revenue?' },
+                              { label: 'Speed To Growth', key: 'growth', title: 'How fast can this drive user growth?' }
                           ].map(({ label, key, title }) => (
                                <div key={key} className="flex flex-col items-center" title={title}>
                                   <label className="text-[10px] font-bold uppercase mb-1 text-center truncate w-full cursor-help">{label}</label>
@@ -319,7 +321,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task, user, onPr
                                         key === 'reach' ? "bg-indigo-500 dark:bg-indigo-400" :
                                         key === 'impact' ? "bg-blue-500 dark:bg-blue-400" :
                                         key === 'effort' ? "bg-yellow-500 dark:bg-yellow-400" :
-                                        "bg-orange-500 dark:bg-orange-400" // Politics color
+                                        key === 'growth' ? "bg-teal-500 dark:bg-teal-400" :
+                                        "bg-orange-500 dark:bg-orange-400" // Internal Demand color
                                     } 
                                     size="sm"
                                   />

@@ -97,6 +97,7 @@ export interface Task {
   confidence?: number; // 1-5 scale
   effort?: number; // 1-5 scale
   risk?: number; // 1-5 scale
+  growth?: number; // 1-5 scale
 }
 
 export interface User {

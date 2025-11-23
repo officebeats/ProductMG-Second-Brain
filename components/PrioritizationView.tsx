@@ -15,24 +15,24 @@ interface PrioritizationViewProps {
 type TaskWithScore = Task & { prioritizationScore: number };
 
 const calculatePrioritizationScore = (task: Task): number => {
-    // Map internal keys to DVF + Politics:
+    // Map internal keys to DVF + Internal Demand:
     // reach -> Desirability (High is good)
     // impact -> Viability (High is good)
     // effort -> Feasibility (High is good - e.g., High Feasibility = Easy)
-    // confidence -> Demand/Politics (High is BAD/High friction)
+    // confidence -> Internal Demand/Politics (High is BAD/High friction)
     
     const desirability = task.reach || 0;
     const viability = task.impact || 0;
     const feasibility = task.effort || 0;
-    const demandPolitics = task.confidence || 1; // Default to 1 to avoid divide by zero
+    const internalDemand = task.confidence || 1; // Default to 1 to avoid divide by zero
 
-    // Formula: (Desirability * Viability * Feasibility) / Demand/Politics
-    // If Politics is high (5), score drops significantly.
+    // Formula: (Desirability * Viability * Feasibility) / Internal Demand
+    // If Internal Demand is high (5), score drops significantly.
     
-    if (demandPolitics === 0) return 0;
+    if (internalDemand === 0) return 0;
 
     // Max raw score potential: (5 * 5 * 5) / 1 = 125
-    return Math.round((desirability * viability * feasibility) / demandPolitics);
+    return Math.round((desirability * viability * feasibility) / internalDemand);
 }
 
 const getTShirtSize = (score: number): string => {
@@ -65,7 +65,7 @@ const PrioritizationView: React.FC<PrioritizationViewProps> = ({ onEditTask, onN
   const { sortedData: sortedTasks, handleSort, getSortArrow } = useSort<TaskWithScore>(tasksWithScores, 'prioritizationScore', 'desc');
 
   const handleTaskUpdate = React.useCallback((task: Task, field: keyof Task, value: any) => {
-    const updatedValue = ['reach', 'impact', 'confidence', 'effort', 'risk'].includes(field as string)
+    const updatedValue = ['reach', 'impact', 'confidence', 'effort', 'risk', 'growth'].includes(field as string)
       ? Number(value) || 0
       : value;
 
@@ -83,11 +83,12 @@ const PrioritizationView: React.FC<PrioritizationViewProps> = ({ onEditTask, onN
                         <tr className="border-b border-light-shadow-2/50 dark:border-dark-shadow-1 text-light-text dark:text-dark-text">
                             <th scope="col" className="px-3 py-3 font-semibold cursor-pointer min-w-[200px]" onClick={() => handleSort('title')}>Summary {getSortArrow('title')}</th>
                             <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('risk')} title="Speed To Revenue: How fast can this generate revenue?">Speed To Revenue {getSortArrow('risk')}</th>
+                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('growth')} title="Speed To Growth: How fast can this drive user growth?">Speed To Growth {getSortArrow('growth')}</th>
                             <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('reach')} title="Desirability: User demand">Desirability {getSortArrow('reach')}</th>
                             <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('impact')} title="Viability: Business value">Viability {getSortArrow('impact')}</th>
                             <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('effort')} title="Feasibility: Ease of build (High = Easy)">Feasibility {getSortArrow('effort')}</th>
-                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('confidence')} title="Demand/Politics: Organizational friction (High = Harder collaboration)">Demand/Politics {getSortArrow('confidence')}</th>
-                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('prioritizationScore')} title="DVF Score / Politics (T-Shirt Size)">Score {getSortArrow('prioritizationScore')}</th>
+                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('confidence')} title="Internal Demand: Organizational friction (High = Harder collaboration)">Internal Demand {getSortArrow('confidence')}</th>
+                            <th scope="col" className="px-3 py-3 font-semibold cursor-pointer" onClick={() => handleSort('prioritizationScore')} title="DVF Score / Internal Demand (T-Shirt Size)">Score {getSortArrow('prioritizationScore')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,6 +100,7 @@ const PrioritizationView: React.FC<PrioritizationViewProps> = ({ onEditTask, onN
                                         <div onClick={() => onEditTask(task)} className="cursor-pointer hover:text-brand-primary transition-colors truncate max-w-xs" title={task.title}>{task.title}</div>
                                     </td>
                                     <td className="px-3 py-2"><RatingDots size="sm" value={task.risk || 0} onChange={(v) => handleTaskUpdate(task, 'risk', v)} colorClass="bg-red-500 dark:bg-red-400" /></td>
+                                    <td className="px-3 py-2"><RatingDots size="sm" value={task.growth || 0} onChange={(v) => handleTaskUpdate(task, 'growth', v)} colorClass="bg-teal-500 dark:bg-teal-400" /></td>
                                     <td className="px-3 py-2"><RatingDots size="sm" value={task.reach || 0} onChange={(v) => handleTaskUpdate(task, 'reach', v)} colorClass="bg-indigo-500 dark:bg-indigo-400" /></td>
                                     <td className="px-3 py-2"><RatingDots size="sm" value={task.impact || 0} onChange={(v) => handleTaskUpdate(task, 'impact', v)} colorClass="bg-blue-500 dark:bg-blue-400" /></td>
                                     <td className="px-3 py-2"><RatingDots size="sm" value={task.effort || 0} onChange={(v) => handleTaskUpdate(task, 'effort', v)} colorClass="bg-yellow-500 dark:bg-yellow-400" /></td>
