@@ -2,8 +2,9 @@
 
 import * as React from 'react';
 import type { Task } from '../types';
+import { TaskStatus } from '../types';
 import { TASK_TYPE_COLORS, TASK_PRIORITY_COLORS } from '../constants';
-import { PriorityIcon, PaperclipIcon } from './icons/Icons';
+import { PriorityIcon, PaperclipIcon, CalendarIcon } from './icons/Icons';
 import NeumorphicCheckbox from './NeumorphicCheckbox';
 
 interface TaskCardProps {
@@ -31,6 +32,18 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEditTask, isCompact = false
     const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
         e.currentTarget.classList.remove('opacity-50', 'rotate-2', 'scale-105');
         onTaskDragEnd();
+    };
+
+    const formatDueDate = (dateString?: string) => {
+        if (!dateString) return null;
+        return new Date(dateString).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    };
+
+    const isOverdue = (task: Task) => {
+        if (!task.dueDate || task.status === TaskStatus.Done) return false;
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        return new Date(task.dueDate) < today;
     };
 
     if (isCompact) {
@@ -81,6 +94,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEditTask, isCompact = false
                             <span className="text-[10px] font-medium ml-0.5">{task.attachments?.length}</span>
                         </div>
                     }
+                    
+                    {task.dueDate && (
+                         <div className={`flex items-center text-[10px] font-medium ${isOverdue(task) ? 'text-red-500 font-bold' : 'text-light-text/70 dark:text-dark-text/70'}`} title={isOverdue(task) ? 'Overdue' : 'Due Date'}>
+                            <CalendarIcon className="h-3 w-3 mr-0.5" />
+                            <span>{formatDueDate(task.dueDate)}</span>
+                        </div>
+                    )}
+
                     <div className={`flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold ${TASK_PRIORITY_COLORS[task.priority]}`}>
                        <PriorityIcon priority={task.priority} />
                     </div>
